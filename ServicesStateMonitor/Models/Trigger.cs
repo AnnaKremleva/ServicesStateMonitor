@@ -7,9 +7,9 @@ namespace ServicesStateMonitor.Models
 {
     public class Trigger
     {
-        public string Name { get; set; }
+        public string OwnerName { get; set; }
 
-        public ServiceState ServiceState { get; set; } = ServiceState.HasProblems;
+        public ServiceState ServiceState { get; set; } = ServiceState.HasProblem;
 
         public TriggerState State { get; set; } = TriggerState.OwnerError;
 

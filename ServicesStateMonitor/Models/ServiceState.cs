@@ -8,6 +8,7 @@ namespace ServicesStateMonitor.Models
     public enum ServiceState
     {
         AllRight,
-        HasProblems
+        HasProblem,
+        AffectedProblem
     }
 }
