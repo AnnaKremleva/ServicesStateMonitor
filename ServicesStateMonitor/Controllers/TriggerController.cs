@@ -8,19 +8,19 @@ namespace ServicesStateMonitor.Controllers
     [ApiController]
     public class TriggerController : ControllerBase
     {
-        private readonly IRepository _repository;
+        private readonly IServicesRepository _servicesRepository;
         private readonly ITriggerFactory _factory;
 
-        public TriggerController(IRepository repository, ITriggerFactory factory)
+        public TriggerController(IServicesRepository servicesRepository, ITriggerFactory factory)
         {
-            _repository = repository;
+            _servicesRepository = servicesRepository;
             _factory = factory;
         }
 
         public StatusCodeResult Add([FromQuery] string message)
         {
             var trigger = _factory.GetTrigger(message);
-            _repository.UpdateState(trigger);
+            _servicesRepository.UpdateState(trigger);
 
             return new StatusCodeResult(StatusCodes.Status200OK);
         }

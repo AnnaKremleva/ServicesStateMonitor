@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServicesStateMonitor.Models
 {
     public class Service
     {
+        [Required]
         public string Name { get; set; }
 
         public ServiceState State { get; set; } = ServiceState.AllRight;

@@ -5,24 +5,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServicesStateMonitor.Interfaces;
+using ServicesStateMonitor.Models;
 
 namespace ServicesStateMonitor.Controllers
 {
     public class ServicesController : Controller
     {
-        private IRepository _repository;
+        private readonly IServicesRepository _repository;
 
-        public ServicesController(IRepository repository)
+        public ServicesController(IServicesRepository repository)
         {
             _repository = repository;
         }
 
         public ActionResult Index()
         {
-            return View();
+            return View(_repository.Services);
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
             return View();
         }
@@ -33,11 +34,11 @@ namespace ServicesStateMonitor.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Service service)
         {
             try
             {
-                // TODO: Add insert logic here
+                _repository.AddService(service);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -47,13 +48,13 @@ namespace ServicesStateMonitor.Controllers
             }
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string id, IFormCollection collection)
         {
             try
             {
@@ -67,13 +68,13 @@ namespace ServicesStateMonitor.Controllers
             }
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string id, IFormCollection collection)
         {
             try
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ServicesStateMonitor.Interfaces
 {
-    public interface IRepository
+    public interface IServicesRepository
     {
         IEnumerable<Service> Services { get; }
 
@@ -11,6 +11,8 @@ namespace ServicesStateMonitor.Interfaces
 
         void AddService(Service service);
 
-        void DeleteService(Service service);
+        void UpdateService(Service service);
+
+        void DeleteService(string name);
     }
 }

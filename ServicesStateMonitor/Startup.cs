@@ -23,7 +23,8 @@ namespace ServicesStateMonitor
             services.AddControllersWithViews();
             services.AddSignalR();
 
-            services.AddSingleton<IRepository, TemporaryRepository>();
+            services.AddSingleton<IServicesInitialData, TemporaryData>();
+            services.AddSingleton<IServicesRepository, ServicesRepository>();
             services.AddSingleton<ITriggerFactory, TriggerFactory>();
         }
 

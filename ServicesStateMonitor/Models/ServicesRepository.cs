@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 namespace ServicesStateMonitor.Models
 {
-    public class TemporaryRepository : IRepository
+    public class ServicesRepository : IServicesRepository
     {
         private readonly ConcurrentDictionary<string, Service> _services;
 
-        public TemporaryRepository()
+        public ServicesRepository(IServicesInitialData database)
         {
             _services = new ConcurrentDictionary<string, Service>();
+            InitRepo(database.GetInitialData());
         }
 
         public IEnumerable<Service> Services
@@ -41,9 +42,22 @@ namespace ServicesStateMonitor.Models
             });
         }
 
-        public void DeleteService(Service service)
+        public void UpdateService(Service service)
         {
-            _services.TryRemove(service.Name, out var _);
+            AddService(service);
+        }
+
+        public void DeleteService(string name)
+        {
+            _services.TryRemove(name, out var _);
+        }
+
+        private void InitRepo(IEnumerable<Service> services)
+        {
+            foreach (var service in services)
+            {
+                AddService(service);
+            }
         }
     }
 }
