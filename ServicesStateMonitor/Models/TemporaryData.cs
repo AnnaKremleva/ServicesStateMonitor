@@ -24,6 +24,10 @@ namespace ServicesStateMonitor.Models
                 EssentialLinks = new List<string>
                 {
                     "https://www.google.com/"
+                },
+                DependFrom = new HashSet<Service>
+                {
+                    serviceFirst
                 }
             };
             var serviceThird = new Service
@@ -40,17 +44,32 @@ namespace ServicesStateMonitor.Models
                 EssentialLinks = new List<string>
                 {
                     "https://www.google.ru/imghp"
+                },
+                DependFrom = new HashSet<Service>
+                {
+                    serviceSecond
                 }
             };
-
-            serviceFourth.Dependents.Add(serviceFirst);
-            serviceThird.Dependents.Add(serviceSecond);
-            serviceFirst.Dependents.Add(serviceFourth);
+            var serviceFifth = new Service
+            {
+                Name = "Fifth",
+                EssentialLinks = new List<string>
+                {
+                    "https://www.google.ru/imghp"
+                },
+                DependFrom = new HashSet<Service>
+                {
+                    serviceFirst,
+                    serviceThird
+                }
+            };
+            serviceFirst.DependFrom.Add(serviceFourth);
 
             services.Add(serviceFirst);
             services.Add(serviceSecond);
             services.Add(serviceThird);
             services.Add(serviceFourth);
+            services.Add(serviceFifth);
 
             return services;
         }

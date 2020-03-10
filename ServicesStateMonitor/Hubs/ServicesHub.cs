@@ -9,9 +9,9 @@ namespace ServicesStateMonitor.Hubs
     {
         //https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&tabs=visual-studio
 
-        public async Task UpdateMap(List<Service> services)
+        public async Task UpdateMap(IEnumerable<Service> services)
         {
-            await Clients.All.SendAsync("UpdateTrigger", services);
+            await Clients.All.SendAsync("UpdatedByTrigger", services);
         }
     }
 }

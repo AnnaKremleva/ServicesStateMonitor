@@ -12,17 +12,32 @@ namespace ServicesStateMonitor.Models
 
         public List<string> EssentialLinks { get; set; } = new List<string>();
 
-        public List<Trigger> Triggers { get; set; } = new List<Trigger>();
+        public HashSet<string> ProblemList { get; set; } = new HashSet<string>();
 
-        public List<string> ProblemList { get; set; } = new List<string>();
+        public HashSet<Service> Dependents { get; set; } = new HashSet<Service>();
 
-        public List<Service> Dependents { get; set; } = new List<Service>();
-
-        public bool Attended { get; set; }
+        public HashSet<Service> DependFrom { get; set; } = new HashSet<Service>();
 
         public void UpdateState(Trigger trigger)
         {
-            //TODO update
+            State = IsWorse(trigger.ServiceState) ? trigger.ServiceState : State;
+
+            if (trigger.ServiceState == ServiceState.AllRight)
+            {
+                ProblemList.RemoveWhere(name => name.Contains(trigger.Name));
+                if (NoProblems())
+                    State = ServiceState.AllRight;
+            }
+            else
+            {
+                ProblemList.Add(trigger.Name);
+            }
         }
+
+        private bool IsWorse(ServiceState triggerState)
+            => State < triggerState;
+
+        private bool NoProblems()
+            => ProblemList.Count == 0;
     }
 }

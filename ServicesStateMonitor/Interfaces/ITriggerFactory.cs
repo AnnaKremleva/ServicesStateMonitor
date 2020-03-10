@@ -4,6 +4,8 @@ namespace ServicesStateMonitor.Interfaces
 {
     public interface ITriggerFactory
     {
-        Trigger GetTrigger(string message);
+        Trigger GetFarewellTrigger(Service serviceOwner);
+
+        Trigger GetDependentTrigger(Service serviceOwner, Trigger trigger);
     }
 }

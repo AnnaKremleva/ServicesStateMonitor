@@ -24,8 +24,9 @@ namespace ServicesStateMonitor
             services.AddSignalR();
 
             services.AddSingleton<IServicesInitialData, TemporaryData>();
-            services.AddSingleton<IServicesRepository, ServicesRepository>();
+            services.AddSingleton<IServicesRepository, Repository>();
             services.AddSingleton<ITriggerFactory, TriggerFactory>();
+            services.AddSingleton<IServiceMapper, MapperFactory>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,7 +50,7 @@ namespace ServicesStateMonitor
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default",
-                    "{controller=Home}/{action=Index}/{id?}");
+                    "{controller=Services}/{action=Index}/{id?}");
                 endpoints.MapHub<ServicesHub>("servicesHub");
             });
         }

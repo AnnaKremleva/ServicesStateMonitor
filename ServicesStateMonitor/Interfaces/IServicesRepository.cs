@@ -9,7 +9,7 @@ namespace ServicesStateMonitor.Interfaces
 
         void UpdateState(Trigger trigger);
 
-        void AddService(Service service);
+        void AddService(Service newService);
 
         void UpdateService(Service service);
 
