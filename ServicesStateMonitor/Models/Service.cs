@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ServicesStateMonitor.Utils;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServicesStateMonitor.Models
@@ -27,6 +28,8 @@ namespace ServicesStateMonitor.Models
                 ProblemList.RemoveWhere(name => name.Contains(trigger.Name));
                 if (NoProblems())
                     State = ServiceState.AllRight;
+                else if (NoOwnProblems())
+                    State = ServiceState.AffectedByProblem;
             }
             else
             {
@@ -39,5 +42,16 @@ namespace ServicesStateMonitor.Models
 
         private bool NoProblems()
             => ProblemList.Count == 0;
+
+        private bool NoOwnProblems()
+        {
+            bool result = true;
+            foreach (string problem in ProblemList)
+            {
+                if (problem.Contains(Name.GetWithPrefix()))
+                    result = false;
+            }
+            return result;
+        }
     }
 }

@@ -7,5 +7,7 @@ namespace ServicesStateMonitor.Interfaces
         Trigger GetFarewellTrigger(Service serviceOwner);
 
         Trigger GetDependentTrigger(Service serviceOwner, Trigger trigger);
+
+        Trigger GetUpdatedTrigger(Service serviceOwner, Trigger trigger);
     }
 }

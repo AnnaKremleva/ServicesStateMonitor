@@ -83,7 +83,7 @@ namespace ServicesStateMonitor.Models
 
         private void UpdateServices(Service serviceOwner, Trigger trigger)
         {
-            serviceOwner.UpdateState(trigger);
+            serviceOwner.UpdateState(_triggerFactory.GetUpdatedTrigger(serviceOwner, trigger));
             var currentServices = GetSnapshot();
 
             foreach (int index in _serviceMapper.FindDependentIndexes(currentServices, serviceOwner))

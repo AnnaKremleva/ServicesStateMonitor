@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ServicesStateMonitor.Models
 {
@@ -15,8 +11,7 @@ namespace ServicesStateMonitor.Models
         public string OwnerName { get; set; }
 
         [Required]
-        [Range(0, 2, 
-            ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [EnumDataType(typeof(ServiceState), ErrorMessage = "Value doesn't exist within enum ServiceState")]
         public ServiceState ServiceState { get; set; } = ServiceState.HasProblem;
 
         public TriggerState State { get; set; } = TriggerState.OwnerError;
