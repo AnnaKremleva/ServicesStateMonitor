@@ -1,13 +1,17 @@
+using Moq;
 using NUnit.Framework;
+using ServicesStateMonitor.Enums;
+using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
 using System.Collections.Generic;
 
 namespace ServicesStateTests
 {
-    public class ServiceTests
+    public class UpdateServiceStateTests
     {
         private Service _service;
         private Trigger _trigger;
+        private ServiceStateHandler _stateHandler;
 
         [SetUp]
         public void Setup()
@@ -25,6 +29,13 @@ namespace ServicesStateTests
             {
                 Name = "TestTriggerName"
             };
+
+            var mockFactory = new Mock<ITriggerFactory>();
+            mockFactory
+                .Setup(m => m.GetWithPrefix(It.IsAny<string>()))
+                .Returns((string s) => s);
+
+            _stateHandler = new ServiceStateHandler(mockFactory.Object);
         }
 
         [TestCase(ServiceState.HasProblem, ServiceState.AllRight, ServiceState.HasProblem)]
@@ -49,9 +60,9 @@ namespace ServicesStateTests
         [TestCase(ServiceState.AffectedByProblem, ServiceState.AllRight, ServiceState.AffectedByProblem)]
         [TestCase(ServiceState.AffectedByProblem, ServiceState.AffectedByProblem, ServiceState.AffectedByProblem)]
         [TestCase(ServiceState.HasProblem, ServiceState.HasProblem, ServiceState.AffectedByProblem)]
-        [TestCase(ServiceState.AllRight, ServiceState.AllRight, ServiceState.AllRight)]
+        [TestCase(ServiceState.AffectedByProblem, ServiceState.AllRight, ServiceState.AllRight)]
         [TestCase(ServiceState.AffectedByProblem, ServiceState.AffectedByProblem, ServiceState.AllRight)]
-        [TestCase(ServiceState.HasProblem, ServiceState.HasProblem, ServiceState.AllRight)]
+        [TestCase(ServiceState.AffectedByProblem, ServiceState.HasProblem, ServiceState.AllRight)]
         public void CanUpdateStateAnotherProblem(ServiceState expectedState, ServiceState oldState, ServiceState triggerState)
         {
             BaseTest(expectedState, oldState, triggerState);
@@ -78,10 +89,17 @@ namespace ServicesStateTests
             _service.State = oldState;
             _trigger.ServiceState = triggerState;
 
-            _service.UpdateState(_trigger);
+            _stateHandler.UpdateServiceState(_service, _trigger);
 
             Assert.AreEqual(expectedState, _service.State, $"from {oldState} by {triggerState}");
-            Assert.AreEqual(triggerState != ServiceState.AllRight, _service.ProblemList.Contains(_trigger.Name), "list problems update");
+            Assert.AreEqual(HasProblem(triggerState), ProcessedCorrectly(), 
+                $"list problems update by trigger {_trigger.Name} with state {_trigger.ServiceState}");
         }
+
+        private bool HasProblem(ServiceState triggerState)
+            => triggerState != ServiceState.AllRight;
+
+        private bool ProcessedCorrectly()
+            => _service.ProblemList.Contains(_trigger.Name);
     }
 }

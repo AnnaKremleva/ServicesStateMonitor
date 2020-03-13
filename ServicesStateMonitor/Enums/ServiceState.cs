@@ -1,4 +1,4 @@
-﻿namespace ServicesStateMonitor.Models
+﻿namespace ServicesStateMonitor.Enums
 {
     public enum ServiceState
     {

@@ -9,11 +9,13 @@ namespace ServicesStateMonitor.Models
         private readonly ConcurrentDictionary<string, Service> _services;
         private readonly ITriggerFactory _triggerFactory;
         private readonly IServiceMapper _serviceMapper;
+        private readonly IServiceStateHandler _stateHandler;
 
-        public Repository(IServicesInitialData database, ITriggerFactory triggerFactory, IServiceMapper serviceMapper)
+        public Repository(IServicesInitialData database, ITriggerFactory triggerFactory, IServiceMapper serviceMapper, IServiceStateHandler stateHandler)
         {
             _triggerFactory = triggerFactory;
             _serviceMapper = serviceMapper;
+            _stateHandler = stateHandler;
             _services = new ConcurrentDictionary<string, Service>();
             InitRepo(database.GetInitialData());
         }
@@ -35,7 +37,7 @@ namespace ServicesStateMonitor.Models
                 UpdateServices(service, trigger);
         }
 
-        public void AddService(Service newService)
+        public void Create(Service newService)
         {
             _services.AddOrUpdate(newService.Name, newService, (key, oldValue) =>
             {
@@ -55,20 +57,20 @@ namespace ServicesStateMonitor.Models
             }
         }
 
-        public void UpdateService(Service service)
+        public void Update(Service service)
         {
-            AddService(service);
+            Create(service);
         }
 
-        public void DeleteService(string name)
+        public void Delete(Service service)
         {
-            if (_services.TryRemove(name, out var removed))
+            if (_services.TryRemove(service.Name, out var removed))
             {
                 foreach (var pair in _services)
                 {
                     pair.Value.Dependents.Remove(removed);
                     pair.Value.DependFrom.Remove(removed);
-                    pair.Value.UpdateState(_triggerFactory.GetFarewellTrigger(removed));
+                    _stateHandler.UpdateServiceState(pair.Value, _triggerFactory.GetFarewellTrigger(removed));
                 }
             }
         }
@@ -77,18 +79,18 @@ namespace ServicesStateMonitor.Models
         {
             foreach (var service in services)
             {
-                AddService(service);
+                Create(service);
             }
         }
 
         private void UpdateServices(Service serviceOwner, Trigger trigger)
         {
-            serviceOwner.UpdateState(_triggerFactory.GetUpdatedTrigger(serviceOwner, trigger));
+            _stateHandler.UpdateServiceState(serviceOwner, _triggerFactory.GetUpdatedTrigger(serviceOwner, trigger));
             var currentServices = GetSnapshot();
 
             foreach (int index in _serviceMapper.FindDependentIndexes(currentServices, serviceOwner))
             {
-                currentServices[index].UpdateState(_triggerFactory.GetDependentTrigger(serviceOwner, trigger));
+                _stateHandler.UpdateServiceState(currentServices[index], _triggerFactory.GetDependentTrigger(serviceOwner, trigger));
             }
         }
 

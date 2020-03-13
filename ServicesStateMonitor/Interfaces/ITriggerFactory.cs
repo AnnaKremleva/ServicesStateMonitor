@@ -4,10 +4,12 @@ namespace ServicesStateMonitor.Interfaces
 {
     public interface ITriggerFactory
     {
-        Trigger GetFarewellTrigger(Service serviceOwner);
+        Trigger GetFarewellTrigger(Service service);
 
-        Trigger GetDependentTrigger(Service serviceOwner, Trigger trigger);
+        Trigger GetDependentTrigger(Service service, Trigger trigger);
 
-        Trigger GetUpdatedTrigger(Service serviceOwner, Trigger trigger);
+        Trigger GetUpdatedTrigger(Service service, Trigger trigger);
+
+        string GetWithPrefix(string name);
     }
 }

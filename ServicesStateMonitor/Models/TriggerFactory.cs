@@ -1,31 +1,36 @@
-﻿using ServicesStateMonitor.Interfaces;
-using ServicesStateMonitor.Utils;
+﻿using ServicesStateMonitor.Enums;
+using ServicesStateMonitor.Interfaces;
 
 namespace ServicesStateMonitor.Models
 {
     public class TriggerFactory : ITriggerFactory
     {
-        public Trigger GetFarewellTrigger(Service serviceOwner)
+        private const string Separator = " <-- ";
+
+        public Trigger GetFarewellTrigger(Service service)
             => new Trigger
             {
-                Name = serviceOwner.Name,
+                Name = GetWithPrefix(service.Name),
                 ServiceState = ServiceState.AllRight
             };
 
-        public Trigger GetDependentTrigger(Service serviceOwner, Trigger trigger)
+        public Trigger GetDependentTrigger(Service service, Trigger trigger)
             => new Trigger
             {
-                Name = string.Concat(trigger.Name, serviceOwner.Name.GetWithPrefix()),
+                Name = string.Concat(trigger.Name, GetWithPrefix(service.Name)),
                 ServiceState = trigger.ServiceState == ServiceState.AllRight
                     ? ServiceState.AllRight
                     : ServiceState.AffectedByProblem
             };
 
-        public Trigger GetUpdatedTrigger(Service serviceOwner, Trigger trigger)
+        public Trigger GetUpdatedTrigger(Service service, Trigger trigger)
             => new Trigger
             {
-                Name = string.Concat(trigger.Name, serviceOwner.Name.GetWithPrefix()),
+                Name = string.Concat(trigger.Name, GetWithPrefix(service.Name)),
                 ServiceState = trigger.ServiceState
             };
+
+        public string GetWithPrefix(string name)
+            => string.Concat(Separator, name);
     }
 }

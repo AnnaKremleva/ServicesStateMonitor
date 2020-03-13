@@ -38,7 +38,7 @@ namespace ServicesStateMonitor.Controllers
         {
             try
             {
-                _repository.AddService(service);
+                _repository.Create(service);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -58,7 +58,7 @@ namespace ServicesStateMonitor.Controllers
         {
             try
             {
-                // TODO: Add update logic here
+                // TODO: Create update logic here
 
                 return RedirectToAction(nameof(Index));
             }
@@ -78,7 +78,7 @@ namespace ServicesStateMonitor.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
+                // TODO: Create delete logic here
 
                 return RedirectToAction(nameof(Index));
             }

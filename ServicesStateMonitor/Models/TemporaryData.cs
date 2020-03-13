@@ -73,5 +73,13 @@ namespace ServicesStateMonitor.Models
 
             return services;
         }
+
+        public void Create(Service service) { } 
+
+        public void Update(Service service) { }
+
+        public void Delete(Service service) { }
+
+        //TODO need real CRUD
     }
 }

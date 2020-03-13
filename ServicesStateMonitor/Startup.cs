@@ -27,6 +27,7 @@ namespace ServicesStateMonitor
             services.AddSingleton<IServicesRepository, Repository>();
             services.AddSingleton<ITriggerFactory, TriggerFactory>();
             services.AddSingleton<IServiceMapper, MapperFactory>();
+            services.AddSingleton<IServiceStateHandler, ServiceStateHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
