@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ServicesStateMonitor.Models.Service>
+﻿@using ServicesStateMonitor.Enums
+@model IEnumerable<ServicesStateMonitor.Models.Service>
 
 <!DOCTYPE html>
 
@@ -20,7 +21,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.State)
             </th>
-            
+            <th>
+                @Html.DisplayNameFor(model => model.DependFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EssentialLinks)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -33,7 +39,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.State)
             </td>
-         
+            <td>
+                @foreach (Service service in item.DependFrom)
+                {
+                    @Html.DisplayFor(modelItem => service.Name)
+                    <br />
+                }
+            </td>
+            <td>
+                @foreach (string link in item.EssentialLinks)
+                {
+                    <a href="@link">@link</a>
+                    <br />
+                }
+            </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.Name */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.Name */ }) |

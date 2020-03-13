@@ -79,7 +79,5 @@ namespace ServicesStateMonitor.Models
         public void Update(Service service) { }
 
         public void Delete(Service service) { }
-
-        //TODO need real CRUD
     }
 }

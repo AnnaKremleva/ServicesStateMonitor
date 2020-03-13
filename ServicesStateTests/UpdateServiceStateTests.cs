@@ -32,7 +32,7 @@ namespace ServicesStateTests
 
             var mockFactory = new Mock<ITriggerFactory>();
             mockFactory
-                .Setup(m => m.GetWithPrefix(It.IsAny<string>()))
+                .Setup(m => m.GetWithOwnerPrefix(It.IsAny<string>()))
                 .Returns((string s) => s);
 
             _stateHandler = new ServiceStateHandler(mockFactory.Object);

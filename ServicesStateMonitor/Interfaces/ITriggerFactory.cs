@@ -10,6 +10,6 @@ namespace ServicesStateMonitor.Interfaces
 
         Trigger GetUpdatedTrigger(Service service, Trigger trigger);
 
-        string GetWithPrefix(string name);
+        string GetWithOwnerPrefix(string name);
     }
 }

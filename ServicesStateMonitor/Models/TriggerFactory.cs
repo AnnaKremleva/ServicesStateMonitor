@@ -10,14 +10,14 @@ namespace ServicesStateMonitor.Models
         public Trigger GetFarewellTrigger(Service service)
             => new Trigger
             {
-                Name = GetWithPrefix(service.Name),
+                Name = GetWithOwnerPrefix(service.Name),
                 ServiceState = ServiceState.AllRight
             };
 
         public Trigger GetDependentTrigger(Service service, Trigger trigger)
             => new Trigger
             {
-                Name = string.Concat(trigger.Name, GetWithPrefix(service.Name)),
+                Name = string.Concat(trigger.Name, GetWithOwnerPrefix(service.Name)),
                 ServiceState = trigger.ServiceState == ServiceState.AllRight
                     ? ServiceState.AllRight
                     : ServiceState.AffectedByProblem
@@ -26,11 +26,11 @@ namespace ServicesStateMonitor.Models
         public Trigger GetUpdatedTrigger(Service service, Trigger trigger)
             => new Trigger
             {
-                Name = string.Concat(trigger.Name, GetWithPrefix(service.Name)),
+                Name = string.Concat(trigger.Name, GetWithOwnerPrefix(service.Name)),
                 ServiceState = trigger.ServiceState
             };
 
-        public string GetWithPrefix(string name)
+        public string GetWithOwnerPrefix(string name)
             => string.Concat(Separator, name);
     }
 }

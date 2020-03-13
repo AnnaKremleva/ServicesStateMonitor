@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
 
@@ -30,6 +31,7 @@ namespace ServicesStateMonitor.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Services = new MultiSelectList(_repository.Services);
             return View();
         }
 

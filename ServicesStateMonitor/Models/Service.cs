@@ -18,5 +18,8 @@ namespace ServicesStateMonitor.Models
         public HashSet<Service> Dependents { get; set; } = new HashSet<Service>();
 
         public HashSet<Service> DependFrom { get; set; } = new HashSet<Service>();
+
+        public override string ToString()
+            => Name;
     }
 }

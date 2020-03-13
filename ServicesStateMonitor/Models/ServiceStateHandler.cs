@@ -41,7 +41,7 @@ namespace ServicesStateMonitor.Models
             bool result = true;
             foreach (string problem in service.ProblemList)
             {
-                if (problem.Contains(_triggerFactory.GetWithPrefix(service.Name)))
+                if (problem.Contains(_triggerFactory.GetWithOwnerPrefix(service.Name)))
                     result = false;
             }
             return result;
