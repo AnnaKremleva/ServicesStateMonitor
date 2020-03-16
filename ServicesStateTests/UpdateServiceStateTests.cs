@@ -1,6 +1,7 @@
 using Moq;
 using NUnit.Framework;
 using ServicesStateMonitor.Enums;
+using ServicesStateMonitor.Implementations;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
 using System.Collections.Generic;

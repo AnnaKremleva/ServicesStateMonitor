@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServicesStateMonitor.Hubs;
+using ServicesStateMonitor.Implementations;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
 

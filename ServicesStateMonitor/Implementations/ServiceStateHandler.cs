@@ -1,7 +1,8 @@
 ﻿using ServicesStateMonitor.Enums;
 using ServicesStateMonitor.Interfaces;
+using ServicesStateMonitor.Models;
 
-namespace ServicesStateMonitor.Models
+namespace ServicesStateMonitor.Implementations
 {
     public class ServiceStateHandler : IServiceStateHandler
     {

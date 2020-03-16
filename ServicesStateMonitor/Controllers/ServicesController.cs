@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
+using System.Text;
 
 namespace ServicesStateMonitor.Controllers
 {
     public class ServicesController : Controller
     {
+        private const string NewLineMarker = "\r\n";
+        private const string NewLineMarkerSingle = "\r\n";
+
         private readonly IServicesRepository _repository;
 
         public ServicesController(IServicesRepository repository)
@@ -20,18 +20,11 @@ namespace ServicesStateMonitor.Controllers
         }
 
         public ActionResult Index()
-        {
-            return View(_repository.Services);
-        }
-
-        public ActionResult Details(string id)
-        {
-            return View();
-        }
+            => View(_repository.Services);
 
         public ActionResult Create()
         {
-            ViewBag.Services = new MultiSelectList(_repository.Services);
+            ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(null));
             return View();
         }
 
@@ -40,54 +33,94 @@ namespace ServicesStateMonitor.Controllers
         {
             try
             {
+                ParseLinksText(service);
                 _repository.Create(service);
-
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(null));
                 return View();
             }
         }
 
         public ActionResult Edit(string id)
         {
-            return View();
+            var service = _repository.GetById(id);
+            if (service is null)
+                return RedirectToAction(nameof(Index));
+            
+            UpdateLinksText(service);
+            ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
+            return View(service);
         }
 
         [HttpPost]
-        public ActionResult Edit(string id, IFormCollection collection)
+        public ActionResult Edit(Service service)
         {
             try
             {
-                // TODO: Create update logic here
-
+                ParseLinksText(service);
+                _repository.Update(service);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
+                return View(service);
             }
         }
 
         public ActionResult Delete(string id)
         {
-            return View();
+            var service = _repository.GetById(id);
+            if (service is null)
+                return RedirectToAction(nameof(Index));
+            
+            UpdateLinksText(service);
+            ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
+            return View(service);
         }
 
         [HttpPost]
-        public ActionResult Delete(string id, IFormCollection collection)
+        public ActionResult Delete(Service service)
         {
             try
             {
-                // TODO: Create delete logic here
-
+                _repository.Delete(service);
+                ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
+                return View(service);
             }
+        }
+
+        //TODO this code is not for controller
+        private void ParseLinksText(Service service)
+        {
+            service.EssentialLinks.Clear();
+            if (!(string.IsNullOrWhiteSpace(service.LinksText)))
+            {
+                foreach (string link in service.LinksText.Split(NewLineMarker))
+                {
+                    if (!string.IsNullOrWhiteSpace(link))
+                        service.EssentialLinks.Add(link);
+                } 
+            }
+        }
+
+        private void UpdateLinksText(Service service)
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (string link in service.EssentialLinks)
+            {
+                stringBuilder.Append(link);
+                stringBuilder.Append(NewLineMarkerSingle);
+            }
+            service.LinksText = stringBuilder.ToString();
         }
     }
 }

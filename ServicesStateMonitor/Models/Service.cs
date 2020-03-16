@@ -13,11 +13,14 @@ namespace ServicesStateMonitor.Models
 
         public List<string> EssentialLinks { get; set; } = new List<string>();
 
+        [Display(Name = "Essential links (each one from new line)")]
+        public string LinksText { get; set; } = string.Empty;
+
         public HashSet<string> ProblemList { get; set; } = new HashSet<string>();
 
         public HashSet<Service> Dependents { get; set; } = new HashSet<Service>();
 
-        public HashSet<Service> DependFrom { get; set; } = new HashSet<Service>();
+        public HashSet<string> DependFrom { get; set; } = new HashSet<string>();
 
         public override string ToString()
             => Name;

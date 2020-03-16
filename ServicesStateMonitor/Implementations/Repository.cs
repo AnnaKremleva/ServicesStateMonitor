@@ -1,12 +1,15 @@
-﻿using ServicesStateMonitor.Interfaces;
+﻿using ServicesStateMonitor.Enums;
+using ServicesStateMonitor.Interfaces;
+using ServicesStateMonitor.Models;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace ServicesStateMonitor.Models
+namespace ServicesStateMonitor.Implementations
 {
     public class Repository : IServicesRepository
     {
         private readonly ConcurrentDictionary<string, Service> _services;
+        private readonly ConcurrentDictionary<string, Trigger> _triggers;
         private readonly IServicesInitialData _database;
         private readonly ITriggerFactory _triggerFactory;
         private readonly IServiceMapper _serviceMapper;
@@ -19,6 +22,7 @@ namespace ServicesStateMonitor.Models
             _serviceMapper = serviceMapper;
             _stateHandler = stateHandler;
             _services = new ConcurrentDictionary<string, Service>();
+            _triggers = new ConcurrentDictionary<string, Trigger>();
             InitRepo(_database.GetInitialData());
         }
 
@@ -33,10 +37,29 @@ namespace ServicesStateMonitor.Models
             }
         }
 
+        public IEnumerable<DependenciesViewModel> GetDependencies(Service service)
+        {
+            foreach (var pair in _services)
+            {
+                yield return new DependenciesViewModel
+                {
+                    ServiceName = pair.Value.Name,
+                    Selected = service?.DependFrom.Contains(pair.Value.Name) ?? false
+                };
+            }
+        }
+
         public void UpdateState(Trigger trigger)
         {
             if (_services.TryGetValue(trigger.OwnerName, out var service))
+            {
+                if (trigger.ServiceState != ServiceState.AllRight)
+                    _triggers.AddOrUpdate(_triggerFactory.GetWithOwnerPrefix(trigger.Name), trigger, (key, oldValue) => trigger);
+                else
+                    _triggers.TryRemove(_triggerFactory.GetWithOwnerPrefix(trigger.Name), out var _);
+
                 UpdateServices(service, trigger);
+            }
         }
 
         public void Create(Service newService)
@@ -48,17 +71,12 @@ namespace ServicesStateMonitor.Models
                 oldValue.EssentialLinks = newService.EssentialLinks;
                 return oldValue;
             });
-            _database.Create(newService);
 
-            foreach (var service in Services)
-            {
-                foreach (var dependCandidate in Services)
-                {
-                    if (dependCandidate.DependFrom.Contains(service))
-                        service.Dependents.Add(dependCandidate);
-                }
-                _database.Update(service);
-            }
+            if (_services.TryGetValue(newService.Name, out var created))
+                _database.Create(created);
+
+            UpdateDependents();
+            UpdateProblems();
         }
 
         public void Update(Service service)
@@ -74,12 +92,15 @@ namespace ServicesStateMonitor.Models
                 foreach (var pair in _services)
                 {
                     pair.Value.Dependents.Remove(removed);
-                    pair.Value.DependFrom.Remove(removed);
+                    pair.Value.DependFrom.Remove(removed.Name);
                     _stateHandler.UpdateServiceState(pair.Value, _triggerFactory.GetFarewellTrigger(removed));
                     _database.Update(pair.Value);
                 }
             }
         }
+
+        public Service GetById(string id)
+            => _services.TryGetValue(id, out var service) ? service : null;
 
         private void InitRepo(IEnumerable<Service> services)
         {
@@ -109,5 +130,37 @@ namespace ServicesStateMonitor.Models
             currentServices.AddRange(Services);
             return currentServices;
         }
+
+        private void UpdateDependents()
+        {
+            foreach (var service in Services)
+            {
+                foreach (var dependCandidate in Services)
+                {
+                    if (dependCandidate.DependFrom.Contains(service.Name))
+                        service.Dependents.Add(dependCandidate);
+                    else
+                        service.Dependents.Remove(dependCandidate);
+                }
+                _database.Update(service);
+            }
+        }
+
+        private void UpdateProblems()
+        {
+            foreach (var service in Services)
+            {
+                service.ProblemList.Clear();
+                service.State = ServiceState.AllRight;
+            }
+
+            foreach (var pair in _triggers)
+            {
+                UpdateState(pair.Value);
+            }
+        }
+
+        private bool IsNotOwn(string problem, Service service)
+            => !problem.Contains(_triggerFactory.GetWithOwnerPrefix(service.Name));
     }
 }

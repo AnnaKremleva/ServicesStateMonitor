@@ -7,6 +7,8 @@ namespace ServicesStateMonitor.Interfaces
     {
         IEnumerable<Service> Services { get; }
 
+        IEnumerable<DependenciesViewModel> GetDependencies(Service service);
+
         void UpdateState(Trigger trigger);
 
         void Create(Service newService);
@@ -14,5 +16,7 @@ namespace ServicesStateMonitor.Interfaces
         void Update(Service service);
 
         void Delete(Service service);
+
+        Service GetById(string id);
     }
 }
