@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
+using System;
 using System.Text;
 
 namespace ServicesStateMonitor.Controllers
@@ -10,7 +12,7 @@ namespace ServicesStateMonitor.Controllers
     public class ServicesController : Controller
     {
         private const string NewLineMarker = "\r\n";
-        private const string NewLineMarkerSingle = "\r\n";
+        private const string NewLineMarkerSingle = "\n";
 
         private readonly IServicesRepository _repository;
 

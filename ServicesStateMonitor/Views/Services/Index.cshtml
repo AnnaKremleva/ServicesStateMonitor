@@ -22,7 +22,7 @@
             @Html.DisplayNameFor(model => model.State)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DependFrom)
+            @Html.DisplayNameFor(model => model.DependsFrom)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ProblemList)
@@ -44,7 +44,7 @@
                 @Html.DisplayFor(modelItem => item.State)
             </td>
             <td>
-                @foreach (string serviceName in item.DependFrom)
+                @foreach (string serviceName in item.DependsFrom)
                 {
                     @Html.DisplayFor(modelItem => serviceName)
                     <br/>

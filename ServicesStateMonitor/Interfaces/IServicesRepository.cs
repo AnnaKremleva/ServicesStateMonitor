@@ -18,5 +18,7 @@ namespace ServicesStateMonitor.Interfaces
         void Delete(Service service);
 
         Service GetById(string id);
+
+        bool AlreadyExists(string name);
     }
 }
