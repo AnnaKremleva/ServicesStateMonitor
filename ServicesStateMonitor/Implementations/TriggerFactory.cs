@@ -1,7 +1,6 @@
 ﻿using ServicesStateMonitor.Enums;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
-using System.Collections.Generic;
 
 namespace ServicesStateMonitor.Implementations
 {
@@ -15,18 +14,6 @@ namespace ServicesStateMonitor.Implementations
                 Name = GetWithOwnerPrefix(service.Name),
                 ServiceState = ServiceState.AllRight
             };
-
-        public IEnumerable<Trigger> GetProblemTriggers(Service service)
-        {
-            foreach (string name in service.ProblemList)
-            {
-                yield return new Trigger()
-                {
-                    Name = name,
-                    ServiceState = ServiceState.AffectedByProblem
-                };
-            }
-        }
 
         public Trigger GetDependentTrigger(Service service, Trigger trigger)
             => new Trigger

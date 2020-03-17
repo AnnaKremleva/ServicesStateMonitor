@@ -44,7 +44,7 @@ namespace ServicesStateMonitor.Implementations
                 yield return new DependenciesViewModel
                 {
                     ServiceName = pair.Value.Name,
-                    Selected = service?.DependFrom.Contains(pair.Value.Name) ?? false
+                    Selected = service?.DependsFrom.Contains(pair.Value.Name) ?? false
                 };
             }
         }
@@ -53,13 +53,14 @@ namespace ServicesStateMonitor.Implementations
         {
             if (_services.TryGetValue(trigger.OwnerName, out var service))
             {
-                if (trigger.ServiceState != ServiceState.AllRight)
-                    _triggers.AddOrUpdate(_triggerFactory.GetWithOwnerPrefix(trigger.Name), trigger, (key, oldValue) => trigger);
-                else
-                    _triggers.TryRemove(_triggerFactory.GetWithOwnerPrefix(trigger.Name), out var _);
-
+                trigger.State = TriggerState.HasOwner;
                 UpdateServices(service, trigger);
             }
+
+            if (trigger.ServiceState != ServiceState.AllRight)
+                _triggers.AddOrUpdate(string.Concat(trigger.OwnerName, trigger.Name), trigger, (key, oldValue) => trigger);
+            else
+                _triggers.TryRemove(string.Concat(trigger.OwnerName, trigger.Name), out var _);
         }
 
         public void Create(Service newService)
@@ -67,16 +68,18 @@ namespace ServicesStateMonitor.Implementations
             _services.AddOrUpdate(newService.Name, newService, (key, oldValue) =>
             {
                 oldValue.Name = newService.Name;
-                oldValue.DependFrom = newService.DependFrom;
+                oldValue.DependsFrom = newService.DependsFrom;
                 oldValue.EssentialLinks = newService.EssentialLinks;
                 return oldValue;
             });
 
             if (_services.TryGetValue(newService.Name, out var created))
+            {
                 _database.Create(created);
 
-            UpdateDependents();
-            UpdateProblems();
+                UpdateDependents();
+                UpdateProblems();
+            }
         }
 
         public void Update(Service service)
@@ -89,18 +92,17 @@ namespace ServicesStateMonitor.Implementations
             if (_services.TryRemove(service.Name, out var removed))
             {
                 _database.Delete(removed);
-                foreach (var pair in _services)
-                {
-                    pair.Value.Dependents.Remove(removed);
-                    pair.Value.DependFrom.Remove(removed.Name);
-                    _stateHandler.UpdateServiceState(pair.Value, _triggerFactory.GetFarewellTrigger(removed));
-                    _database.Update(pair.Value);
-                }
+
+                UpdateDependents();
+                UpdateProblems();
             }
         }
 
         public Service GetById(string id)
             => _services.TryGetValue(id, out var service) ? service : null;
+
+        public bool AlreadyExists(string name)
+            => _services.TryGetValue(name, out var _);
 
         private void InitRepo(IEnumerable<Service> services)
         {
@@ -137,7 +139,7 @@ namespace ServicesStateMonitor.Implementations
             {
                 foreach (var dependCandidate in Services)
                 {
-                    if (dependCandidate.DependFrom.Contains(service.Name))
+                    if (dependCandidate.DependsFrom.Contains(service.Name))
                         service.Dependents.Add(dependCandidate);
                     else
                         service.Dependents.Remove(dependCandidate);
@@ -159,8 +161,5 @@ namespace ServicesStateMonitor.Implementations
                 UpdateState(pair.Value);
             }
         }
-
-        private bool IsNotOwn(string problem, Service service)
-            => !problem.Contains(_triggerFactory.GetWithOwnerPrefix(service.Name));
     }
 }

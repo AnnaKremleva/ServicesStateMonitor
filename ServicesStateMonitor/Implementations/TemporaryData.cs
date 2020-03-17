@@ -26,7 +26,7 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/"
                 },
-                DependFrom = new HashSet<string>
+                DependsFrom = new HashSet<string>
                 {
                     "First"
                 }
@@ -46,7 +46,7 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/imghp"
                 },
-                DependFrom = new HashSet<string>
+                DependsFrom = new HashSet<string>
                 {
                     "Second"
                 }
@@ -58,7 +58,7 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/imghp"
                 },
-                DependFrom = new HashSet<string>
+                DependsFrom = new HashSet<string>
                 {
                     "First",
                     "Third"
@@ -81,14 +81,14 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://translate.google.com"
                 },
-                DependFrom = new HashSet<string>
+                DependsFrom = new HashSet<string>
                 {
                     "Fifth",
                     "Third"
                 }
             };
-            serviceFirst.DependFrom.Add("Fourth");
-            serviceSixth.DependFrom.Add("Seventh");
+            serviceFirst.DependsFrom.Add("Fourth");
+            serviceSixth.DependsFrom.Add("Seventh");
 
             services.Add(serviceFirst);
             services.Add(serviceSecond);
