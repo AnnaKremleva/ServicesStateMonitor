@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServicesStateMonitor.Hubs;
+using ServicesStateMonitor.Implementations;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
 
@@ -27,6 +28,7 @@ namespace ServicesStateMonitor
             services.AddSingleton<IServicesRepository, Repository>();
             services.AddSingleton<ITriggerFactory, TriggerFactory>();
             services.AddSingleton<IServiceMapper, MapperFactory>();
+            services.AddSingleton<IServiceStateHandler, ServiceStateHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

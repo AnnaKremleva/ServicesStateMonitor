@@ -7,7 +7,7 @@ namespace ServicesStateMonitor.Hubs
 {
     public class ServicesHub : Hub
     {
-        //https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&tabs=visual-studio
+        //TODO https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&tabs=visual-studio
 
         public async Task UpdateMap(IEnumerable<Service> services)
         {

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ServicesStateMonitor.Models;
+using System.Collections.Generic;
 
-namespace ServicesStateMonitor.Models
+namespace ServicesStateMonitor.Implementations
 {
     public class Mapper
     {

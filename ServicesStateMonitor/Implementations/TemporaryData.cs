@@ -1,7 +1,8 @@
 ﻿using ServicesStateMonitor.Interfaces;
+using ServicesStateMonitor.Models;
 using System.Collections.Generic;
 
-namespace ServicesStateMonitor.Models
+namespace ServicesStateMonitor.Implementations
 {
     public class TemporaryData : IServicesInitialData
     {
@@ -25,9 +26,9 @@ namespace ServicesStateMonitor.Models
                 {
                     "https://www.google.com/"
                 },
-                DependFrom = new HashSet<Service>
+                DependFrom = new HashSet<string>
                 {
-                    serviceFirst
+                    "First"
                 }
             };
             var serviceThird = new Service
@@ -43,11 +44,11 @@ namespace ServicesStateMonitor.Models
                 Name = "Fourth",
                 EssentialLinks = new List<string>
                 {
-                    "https://www.google.ru/imghp"
+                    "https://www.google.com/imghp"
                 },
-                DependFrom = new HashSet<Service>
+                DependFrom = new HashSet<string>
                 {
-                    serviceSecond
+                    "Second"
                 }
             };
             var serviceFifth = new Service
@@ -55,23 +56,55 @@ namespace ServicesStateMonitor.Models
                 Name = "Fifth",
                 EssentialLinks = new List<string>
                 {
-                    "https://www.google.ru/imghp"
+                    "https://www.google.com/imghp"
                 },
-                DependFrom = new HashSet<Service>
+                DependFrom = new HashSet<string>
                 {
-                    serviceFirst,
-                    serviceThird
+                    "First",
+                    "Third"
                 }
             };
-            serviceFirst.DependFrom.Add(serviceFourth);
+            var serviceSixth = new Service
+            {
+                Name = "Sixth",
+                EssentialLinks = new List<string>
+                {
+                    "https://www.google.com/imghp",
+                    "https://translate.google.com",
+                    "https://www.google.com/"
+                }
+            };
+            var serviceSeventh = new Service
+            {
+                Name = "Seventh",
+                EssentialLinks = new List<string>
+                {
+                    "https://translate.google.com"
+                },
+                DependFrom = new HashSet<string>
+                {
+                    "Fifth",
+                    "Third"
+                }
+            };
+            serviceFirst.DependFrom.Add("Fourth");
+            serviceSixth.DependFrom.Add("Seventh");
 
             services.Add(serviceFirst);
             services.Add(serviceSecond);
             services.Add(serviceThird);
             services.Add(serviceFourth);
             services.Add(serviceFifth);
+            services.Add(serviceSixth);
+            services.Add(serviceSeventh);
 
             return services;
         }
+
+        public void Create(Service service) { } 
+
+        public void Update(Service service) { }
+
+        public void Delete(Service service) { }
     }
 }

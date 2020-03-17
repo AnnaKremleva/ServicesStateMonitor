@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using ServicesStateMonitor.Implementations;
 using ServicesStateMonitor.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,7 +128,7 @@ namespace ServicesStateTests
             service0.Dependents.Add(service4);
             service1.Dependents.Add(service3);
             service2.Dependents.Add(service4);
-            service3.Dependents.Add(service0);
+            service3.Dependents.Add(service0); //cyclic dependency 3->0->1->3
 
             services.Add(service0);
             services.Add(service1);
