@@ -1,17 +1,24 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ServicesStateMonitor.Models;
-using System.Collections.Generic;
+using ServicesStateMonitor.Interfaces;
 using System.Threading.Tasks;
 
 namespace ServicesStateMonitor.Hubs
 {
     public class ServicesHub : Hub
     {
-        //TODO https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&tabs=visual-studio
+        private readonly IServicesRepository _servicesRepository;
 
-        public async Task UpdateMap(IEnumerable<Service> services)
+        public ServicesHub(IServicesRepository servicesRepository)
         {
-            await Clients.All.SendAsync("UpdatedByTrigger", services);
+            _servicesRepository = servicesRepository;
+        }
+
+        public async Task Init()
+        {
+            foreach (var service in _servicesRepository.Services)
+            {
+                await Clients.Caller.SendAsync("Updated", service.Name, service.State.ToString());
+            }
         }
     }
 }

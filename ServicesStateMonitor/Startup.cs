@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -51,9 +52,9 @@ namespace ServicesStateMonitor
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ServicesHub>("servicesHub");
                 endpoints.MapControllerRoute("default",
                     "{controller=Services}/{action=Index}/{id?}");
-                endpoints.MapHub<ServicesHub>("servicesHub");
             });
         }
     }

@@ -25,9 +25,11 @@ namespace ServicesStateMonitor.Controllers
         [Route("add")]
         public async Task<StatusCodeResult> Add([FromBody] Trigger trigger)
         {
-            
             _servicesRepository.UpdateState(trigger);
-            //await _hubContext.Clients.All.SendAsync(("UpdatedByTrigger", _servicesRepository.Services));
+            foreach (var service in _servicesRepository.Services)
+            {
+                await _hubContext.Clients.All.SendAsync("Updated", service.Name, service.State.ToString());
+            }
 
             return new StatusCodeResult(StatusCodes.Status200OK);
         }
