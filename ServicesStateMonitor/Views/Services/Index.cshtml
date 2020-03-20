@@ -40,7 +40,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td id="@item.Name">
                 @Html.DisplayFor(modelItem => item.State)
             </td>
             <td>
@@ -78,5 +78,9 @@
     }
     </tbody>
 </table>
+
+<script src="js/signalr/dist/browser/signalr.min.js"></script>
+<script src="js/hub.js"></script>
+
 </body>
 </html>

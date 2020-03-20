@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
-using System;
 using System.Text;
 
 namespace ServicesStateMonitor.Controllers
@@ -51,7 +48,7 @@ namespace ServicesStateMonitor.Controllers
             var service = _repository.GetById(id);
             if (service is null)
                 return RedirectToAction(nameof(Index));
-            
+
             UpdateLinksText(service);
             ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
             return View(service);
@@ -78,7 +75,7 @@ namespace ServicesStateMonitor.Controllers
             var service = _repository.GetById(id);
             if (service is null)
                 return RedirectToAction(nameof(Index));
-            
+
             UpdateLinksText(service);
             ViewBag.Dependencies = new MultiSelectList(_repository.GetDependencies(service));
             return View(service);
@@ -104,13 +101,13 @@ namespace ServicesStateMonitor.Controllers
         private void ParseLinksText(Service service)
         {
             service.EssentialLinks.Clear();
-            if (!(string.IsNullOrWhiteSpace(service.LinksText)))
+            if (!string.IsNullOrWhiteSpace(service.LinksText))
             {
                 foreach (string link in service.LinksText.Split(NewLineMarker))
                 {
                     if (!string.IsNullOrWhiteSpace(link))
                         service.EssentialLinks.Add(link);
-                } 
+                }
             }
         }
 
