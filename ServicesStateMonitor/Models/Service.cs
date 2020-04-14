@@ -9,7 +9,11 @@ namespace ServicesStateMonitor.Models
         [Required]
         public string Name { get; set; } = string.Empty;
 
+        public ServiceLevel Level { get; set; } = ServiceLevel.Frontend;
+
         public ServiceState State { get; set; } = ServiceState.AllRight;
+
+        public List<string> Instances { get; set; } = new List<string>();
 
         [Display(Name = "Essential links")]
         public List<string> EssentialLinks { get; set; } = new List<string>();

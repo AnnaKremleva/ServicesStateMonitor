@@ -12,6 +12,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
     <tr>
@@ -19,7 +20,7 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.State)
+            @Html.DisplayNameFor(model => model.Level)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.DependsFrom)
@@ -40,8 +41,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td id="@item.Name">
-                @Html.DisplayFor(modelItem => item.State)
+            <td>
+                @Html.DisplayFor(modelItem => item.Level)
             </td>
             <td>
                 @foreach (string serviceName in item.DependsFrom)
@@ -78,9 +79,6 @@
     }
     </tbody>
 </table>
-
-<script src="js/signalr/dist/browser/signalr.min.js"></script>
-<script src="js/hub.js"></script>
 
 </body>
 </html>

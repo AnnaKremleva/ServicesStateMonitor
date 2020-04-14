@@ -1,4 +1,5 @@
-﻿using ServicesStateMonitor.Interfaces;
+﻿using ServicesStateMonitor.Enums;
+using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
 using System.Collections.Generic;
 
@@ -17,7 +18,16 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/",
                     "https://translate.google.com"
-                }
+                },
+                Instances = new List<string>()
+                {
+                    "1",
+                    "2",
+                    "3",
+                    "ir",
+                    "sg"
+                },
+                Level = ServiceLevel.Database
             };
             var serviceSecond = new Service
             {
@@ -26,10 +36,16 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/"
                 },
+                Instances = new List<string>()
+                {
+                    "1",
+                    "ir"
+                },
                 DependsFrom = new HashSet<string>
                 {
                     "First"
-                }
+                },
+                Level = ServiceLevel.Backend
             };
             var serviceThird = new Service
             {
@@ -37,7 +53,14 @@ namespace ServicesStateMonitor.Implementations
                 EssentialLinks = new List<string>
                 {
                     "https://translate.google.com"
-                }
+                },
+                Instances = new List<string>()
+                {
+                    "1",
+                    "2",
+                    "sg"
+                },
+                Level = ServiceLevel.Frontend
             };
             var serviceFourth = new Service
             {
@@ -46,10 +69,17 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/imghp"
                 },
+                Instances = new List<string>()
+                {
+                    "com",
+                    "ir",
+                    "sg"
+                },
                 DependsFrom = new HashSet<string>
                 {
                     "Second"
-                }
+                },
+                Level = ServiceLevel.Database
             };
             var serviceFifth = new Service
             {
@@ -58,11 +88,17 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://www.google.com/imghp"
                 },
+                Instances = new List<string>()
+                {
+                    "1",
+                    "2"
+                },
                 DependsFrom = new HashSet<string>
                 {
                     "First",
                     "Third"
-                }
+                },
+                Level = ServiceLevel.Backend
             };
             var serviceSixth = new Service
             {
@@ -81,11 +117,16 @@ namespace ServicesStateMonitor.Implementations
                 {
                     "https://translate.google.com"
                 },
+                Instances = new List<string>()
+                {
+                    "com"
+                },
                 DependsFrom = new HashSet<string>
                 {
                     "Fifth",
                     "Third"
-                }
+                },
+                Level = ServiceLevel.Frontend
             };
             serviceFirst.DependsFrom.Add("Fourth");
             serviceSixth.DependsFrom.Add("Seventh");

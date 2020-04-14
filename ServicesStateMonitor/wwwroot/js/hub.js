@@ -1,8 +1,9 @@
 ﻿"use strict";
 
-var classAllRight = "table-success";
-var classAffected = "table-warning";
-var classProblem = "table-danger";
+var classAllRight = "btn-success";
+var classAffected = "btn-warning";
+var classProblem = "btn-danger";
+var classNeutral = "btn-secondary";
 
 var stateAllRight = "AllRight";
 var stateAffected = "AffectedByProblem";
@@ -17,8 +18,8 @@ connection.start().then(function() {
 connection.on("Updated",
     function(name, state) {
         const elem = document.getElementById(name);
-        elem.className = GetClass(state);
-        elem.textContent = state;
+        RemoveStateClasses(elem);
+        elem.classList.add(GetClass(state));
     });
 
 function GetClass(state) {
@@ -30,4 +31,11 @@ function GetClass(state) {
         stateClass = classProblem;
     }
     return stateClass;
+}
+
+function RemoveStateClasses(elem) {
+    elem.classList.remove(classAllRight);
+    elem.classList.remove(classAffected);
+    elem.classList.remove(classProblem);
+    elem.classList.remove(classNeutral);
 }

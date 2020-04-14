@@ -54,7 +54,7 @@ namespace ServicesStateMonitor
             {
                 endpoints.MapHub<ServicesHub>("servicesHub");
                 endpoints.MapControllerRoute("default",
-                    "{controller=Services}/{action=Index}/{id?}");
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
