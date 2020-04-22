@@ -11,6 +11,8 @@ namespace ServicesStateMonitor.Infrastructure.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            output.PreElement.AppendHtml("<div class=\"col-1\"><div class=\"dropdown\">");
+
             output.TagName = "button";
             output.Attributes.SetAttribute("class", "btn btn-lg btn-secondary dropdown-toggle");
             output.Attributes.SetAttribute("href", "#");
@@ -21,6 +23,8 @@ namespace ServicesStateMonitor.Infrastructure.TagHelpers
             output.Attributes.SetAttribute("aria-expanded", "false");
 
             AddDropdown(Info, output);
+
+            output.PostElement.AppendHtml($"</div></div>");
         }
 
         private void AddDropdown(Service service, TagHelperOutput output)

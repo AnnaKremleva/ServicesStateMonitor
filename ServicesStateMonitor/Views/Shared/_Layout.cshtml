@@ -8,38 +8,50 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">ServicesStateMonitor</a>
-                <button class="navbar-toggler" type="button" database-toggle="collapse" database-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="navbar-brand" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
-                        </li>
-                    </ul>
+    <svg id="linesContainer" width="100%" height="100%" style="position: absolute; top: 0px; z-index: -1;">
+        <line id="line0" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line1" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line2" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line3" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line4" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line5" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line6" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line7" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line8" x1="0" y1="0" x2="0" y2="0" />
+        <line id="line9" x1="0" y1="0" x2="0" y2="0" />
+    </svg>
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">ServicesStateMonitor</a>
+                    <button class="navbar-toggler" type="button" database-toggle="collapse" database-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="navbar-brand" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+            </nav>
+        </header>
         <div class="container">
-            &copy; 2020 - ServicesStateMonitor
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - ServicesStateMonitor
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

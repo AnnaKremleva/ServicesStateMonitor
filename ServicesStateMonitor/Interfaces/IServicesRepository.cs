@@ -20,5 +20,7 @@ namespace ServicesStateMonitor.Interfaces
         Service GetById(string id);
 
         bool AlreadyExists(string name);
+
+        Dictionary<string, HashSet<string>> GetConnectionPairs();
     }
 }
