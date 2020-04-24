@@ -21,6 +21,6 @@ namespace ServicesStateMonitor.Interfaces
 
         bool AlreadyExists(string name);
 
-        Dictionary<string, HashSet<string>> GetConnectionPairs();
+        IEnumerable<(string,string)> GetConnectionPairs();
     }
 }

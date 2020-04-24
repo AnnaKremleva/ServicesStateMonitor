@@ -11,20 +11,14 @@ var stateProblem = "HasProblem";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/servicesHub").build();
 var svg = document.getElementById("linesContainer");
-var counter = 0;
 
 connection.start().then(function() {
-    counter = 0;
     connection.invoke("Init");
 });
 
 window.onresize = handleWindowSize;
 
 function handleWindowSize() {
-    //while (svg.firstChild) {
-    //    svg.firstChild.remove();
-    //}
-    counter = 0;
     connection.invoke("UpdateLines");
 }
 
@@ -39,8 +33,9 @@ connection.on("LineDraw",
     function(serviceId, dependentId) {
         const service = document.getElementById(serviceId);
         const dependent = document.getElementById(dependentId);
+        const lineId = serviceId + dependentId;
 
-        ConnectByLine(service, dependent);
+        ConnectByLine(service, dependent, lineId);
     });
 
 function GetClass(state) {
@@ -61,26 +56,51 @@ function RemoveStateClasses(elem) {
     elem.classList.remove(classNeutral);
 }
 
-function ConnectByLine(from, to) {
+function ConnectByLine(from, to, lineId) {
 
-    const fromX = $(from).offset().left + ($(to).width() / 2);
-    const fromY = $(from).offset().top + ($(from).height() / 2);
-    const targetX = $(to).offset().left + ($(to).width() / 2);
-    const targetY = $(to).offset().top + ($(to).height() / 2);
+    const targetWidth = $(to).width() / 2;
+    const targetHeight = $(to).height() / 2;
+    const fromWidth = $(from).width() / 2;
+    const fromHeight = $(from).height() / 2;
 
-    let cTy;
-    if (targetY > fromY) {
-        cTy = $(to).offset().top;
-    } else {
-        cTy = $(to).offset().top + $(to).height();
-    }
+    const fromX = $(from).offset().left + fromWidth;
+    const fromY = $(from).offset().top + fromHeight;
+    const targetX = $(to).offset().left + targetWidth;
+    const targetY = $(to).offset().top + targetHeight;
 
-    let line0=document.getElementById("line" + counter);
-    line0.setAttribute("x1", fromX);
-    line0.setAttribute("y1", fromY);
-    line0.setAttribute("x2", targetX);
-    line0.setAttribute("y2", cTy);
-    line0.setAttribute("style", "stroke: black");
+    const line = document.getElementById(lineId);
+    line.setAttribute("x1", fromX);
+    line.setAttribute("y1", fromY);
+    line.setAttribute("x2", targetX);
+    line.setAttribute("y2", targetY);
 
-    counter++;
+    const pointerHeight = 3;
+    const pointerLength = 75;
+
+    const deltaX = targetX - fromX;
+    const deltaY = targetY - fromY;
+
+    const pointerDeltaX = Math.abs(deltaX) > Math.abs(deltaY) ? 0 : pointerHeight;
+    const pointerDeltaY = Math.abs(deltaX) > Math.abs(deltaY) ? pointerHeight : 0;
+
+    const pointerCoefficient = Math.abs(deltaX) > Math.abs(deltaY)
+        ? 1 + (targetWidth + pointerLength) / (Math.abs(deltaX) - targetWidth)
+        : 1 + (targetHeight + pointerLength) / (Math.abs(deltaY) - targetHeight);
+
+    const pointerX1 = targetX;
+    const pointerY1 = targetY;
+
+    const pointerX0 = fromX + deltaX / pointerCoefficient;
+    const pointerY0 = fromY + deltaY / pointerCoefficient;
+
+    const pointerX2 = pointerX0 - pointerDeltaX;
+    const pointerY2 = pointerY0 - pointerDeltaY;
+
+    const pointerX3 = pointerX0 + pointerDeltaX;
+    const pointerY3 = pointerY0 + pointerDeltaY;
+
+    let points = pointerX1 + "," + pointerY1 + " " + pointerX2 + "," + pointerY2 + " " + pointerX3 + "," + pointerY3;
+
+    const linePointer = document.getElementById(lineId + "Pointer");
+    linePointer.setAttribute("points", points);
 }

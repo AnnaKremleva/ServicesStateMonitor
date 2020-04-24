@@ -104,18 +104,16 @@ namespace ServicesStateMonitor.Implementations
         public bool AlreadyExists(string name)
             => _services.TryGetValue(name, out var _);
 
-        public Dictionary<string, HashSet<string>> GetConnectionPairs()
+        public IEnumerable<(string,string)> GetConnectionPairs()
         {
-            var result = new Dictionary<string, HashSet<string>>();
+            var result = new List<(string,string)>();
             var currentServices = GetSnapshot();
             foreach (var service in currentServices)
             {
-                var connections = new HashSet<string>();
                 foreach (var dependentService in service.Dependents)
                 {
-                    connections.Add(dependentService.Name);
+                    result.Add((service.Name,dependentService.Name));
                 }
-                result.TryAdd(service.Name, connections);
             }
             return result;
         }

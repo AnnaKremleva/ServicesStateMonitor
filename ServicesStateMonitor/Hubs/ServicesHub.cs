@@ -31,10 +31,7 @@ namespace ServicesStateMonitor.Hubs
         {
             foreach (var servicePairs in _servicesRepository.GetConnectionPairs())
             {
-                foreach (var dependent in servicePairs.Value)
-                {
-                    await Clients.Caller.SendAsync("LineDraw", servicePairs.Key, dependent);
-                }
+                await Clients.Caller.SendAsync("LineDraw", servicePairs.Item1, servicePairs.Item2);
             }
         }
     }

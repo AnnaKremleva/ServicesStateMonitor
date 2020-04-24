@@ -9,16 +9,18 @@
 </head>
 <body>
     <svg id="linesContainer" width="100%" height="100%" style="position: absolute; top: 0px; z-index: -1;">
-        <line id="line0" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line1" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line2" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line3" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line4" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line5" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line6" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line7" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line8" x1="0" y1="0" x2="0" y2="0" />
-        <line id="line9" x1="0" y1="0" x2="0" y2="0" />
+
+        @if (ViewBag.Connections != null)
+        {
+            @foreach (var pair in (List<(string, string)>)ViewBag.Connections)
+            {
+                <connection start="@pair.Item1" end="@pair.Item2"></connection>
+            }
+        }
+
+        @*<circle cx="500" cy="500" r="2" stroke="black" fill="black" />
+        <polygon points="200,10 250,190 160,210" style="fill:black;stroke:black" />*@
+
     </svg>
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">

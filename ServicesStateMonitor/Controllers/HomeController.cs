@@ -15,7 +15,10 @@ namespace ServicesStateMonitor.Controllers
         }
 
         public IActionResult Index()
-            => View(_repository.Services);
+        {
+            ViewBag.Connections = _repository.GetConnectionPairs();
+            return View(_repository.Services);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
