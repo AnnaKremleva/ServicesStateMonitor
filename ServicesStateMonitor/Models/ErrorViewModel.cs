@@ -1,5 +1,3 @@
-using System;
-
 namespace ServicesStateMonitor.Models
 {
     public class ErrorViewModel

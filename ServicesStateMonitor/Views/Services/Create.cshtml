@@ -1,4 +1,5 @@
-﻿@model ServicesStateMonitor.Models.Service
+﻿@using ServicesStateMonitor.Enums
+@model ServicesStateMonitor.Models.Service
 
 <!DOCTYPE html>
 
@@ -20,10 +21,17 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Level" class="control-label"></label>
+                <select asp-for="Level" asp-items="Html.GetEnumSelectList<ServiceLevel>()" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstancesText" class="control-label"></label>
+                <textarea asp-for="InstancesText" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
                 <label asp-for="DependsFrom" class="control-label"></label>
                 <select multiple="multiple" asp-for="DependsFrom" asp-items="@ViewBag.Dependencies" class="form-control"></select>
             </div>
-            
             <div class="form-group">
                 <label asp-for="LinksText" class="control-label"></label>
                 <textarea asp-for="LinksText" class="form-control"></textarea>

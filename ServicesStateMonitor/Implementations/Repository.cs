@@ -1,6 +1,7 @@
 ﻿using ServicesStateMonitor.Enums;
 using ServicesStateMonitor.Interfaces;
 using ServicesStateMonitor.Models;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
@@ -68,6 +69,8 @@ namespace ServicesStateMonitor.Implementations
             _services.AddOrUpdate(newService.Name, newService, (key, oldValue) =>
             {
                 oldValue.Name = newService.Name;
+                oldValue.Level = newService.Level;
+                oldValue.Instances = newService.Instances;
                 oldValue.DependsFrom = newService.DependsFrom;
                 oldValue.EssentialLinks = newService.EssentialLinks;
                 return oldValue;
