@@ -13,7 +13,11 @@ namespace ServicesStateMonitor.Models
 
         public ServiceState State { get; set; } = ServiceState.AllRight;
 
+        [Display(Name = "Instances")]
         public List<string> Instances { get; set; } = new List<string>();
+
+        [Display(Name = "Instances (each one from new line)")]
+        public string InstancesText { get; set; } = string.Empty;
 
         [Display(Name = "Essential links")]
         public List<string> EssentialLinks { get; set; } = new List<string>();

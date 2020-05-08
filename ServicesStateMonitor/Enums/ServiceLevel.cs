@@ -1,9 +1,11 @@
-﻿namespace ServicesStateMonitor.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ServicesStateMonitor.Enums
 {
     public enum ServiceLevel
     {
-        Frontend,
-        Backend,
-        Database
+        [Display(Name = "Frontend")] Frontend,
+        [Display(Name = "Backend")] Backend,
+        [Display(Name = "Database")] Database
     }
 }

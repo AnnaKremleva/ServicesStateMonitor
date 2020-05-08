@@ -15,24 +15,27 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Level)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DependsFrom)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProblemList)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EssentialLinks)
-        </th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Level)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instances)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DependsFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemList)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EssentialLinks)
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
@@ -45,24 +48,31 @@
                 @Html.DisplayFor(modelItem => item.Level)
             </td>
             <td>
+                @foreach (string instance in item.Instances)
+                {
+                    @Html.DisplayFor(modelItem => instance)
+                    <br />
+                }
+            </td>
+            <td>
                 @foreach (string serviceName in item.DependsFrom)
                 {
                     @Html.DisplayFor(modelItem => serviceName)
-                    <br/>
+                    <br />
                 }
             </td>
             <td>
                 @foreach (string problem in item.ProblemList)
                 {
                     @Html.DisplayFor(modelItem => problem)
-                    <br/>
+                    <br />
                 }
             </td>
             <td>
                 @foreach (string link in item.EssentialLinks)
                 {
                     <a href="@link">@link</a>
-                    <br/>
+                    <br />
                 }
             </td>
             <td>

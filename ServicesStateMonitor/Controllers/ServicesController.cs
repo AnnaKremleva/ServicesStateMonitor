@@ -97,6 +97,7 @@ namespace ServicesStateMonitor.Controllers
             }
         }
 
+
         //TODO this code is not for controller
         private void ParseLinksText(Service service)
         {
@@ -107,6 +108,16 @@ namespace ServicesStateMonitor.Controllers
                 {
                     if (!string.IsNullOrWhiteSpace(link))
                         service.EssentialLinks.Add(link);
+                }
+            }
+
+            service.Instances.Clear();
+            if (!string.IsNullOrWhiteSpace(service.InstancesText))
+            {
+                foreach (string instance in service.InstancesText.Split(NewLineMarker))
+                {
+                    if (!string.IsNullOrWhiteSpace(instance))
+                        service.Instances.Add(instance);
                 }
             }
         }
@@ -120,6 +131,14 @@ namespace ServicesStateMonitor.Controllers
                 stringBuilder.Append(NewLineMarkerSingle);
             }
             service.LinksText = stringBuilder.ToString();
+
+            stringBuilder = new StringBuilder();
+            foreach (string instance in service.Instances)
+            {
+                stringBuilder.Append(instance);
+                stringBuilder.Append(NewLineMarkerSingle);
+            }
+            service.InstancesText = stringBuilder.ToString();
         }
     }
 }
